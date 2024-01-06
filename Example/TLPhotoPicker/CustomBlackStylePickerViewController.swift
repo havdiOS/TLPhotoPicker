@@ -13,7 +13,10 @@ extension UIImage {
     public func colorMask(color:UIColor) -> UIImage {
         var result: UIImage?
         let rect = CGRect(x:0, y:0, width:size.width, height:size.height)
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, scale)
+        let rendererFormat = UIGraphicsImageRendererFormat()
+        rendererFormat.opaque = false
+        rendererFormat.scale = scale
+        UIGraphicsImageRenderer(size: rect.size, format: rendererFormat)
         if let c = UIGraphicsGetCurrentContext() {
             self.draw(in: rect)
             c.setFillColor(color.cgColor)

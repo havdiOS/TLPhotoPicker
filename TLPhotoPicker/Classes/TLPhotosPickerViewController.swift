@@ -384,7 +384,10 @@ extension TLPhotosPickerViewController {
     
     private func centerAtRect(image: UIImage?, rect: CGRect, bgColor: UIColor = UIColor.white) -> UIImage? {
         guard let image = image else { return nil }
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, image.scale)
+        let rendererFormat = UIGraphicsImageRendererFormat()
+        rendererFormat.opaque = false
+        rendererFormat.scale = image.scale
+        UIGraphicsImageRenderer(size: rect.size, format: rendererFormat)
         bgColor.setFill()
         UIRectFill(CGRect(x: 0, y: 0, width: rect.size.width, height: rect.size.height))
         image.draw(in: CGRect(x:rect.size.width/2 - image.size.width/2, y:rect.size.height/2 - image.size.height/2, width:image.size.width, height:image.size.height))
@@ -1349,7 +1352,10 @@ extension UIImage {
     public func colorMask(color:UIColor) -> UIImage {
         var result: UIImage?
         let rect = CGRect(x:0, y:0, width:size.width, height:size.height)
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, scale)
+        let rendererFormat = UIGraphicsImageRendererFormat()
+        rendererFormat.opaque = false
+        rendererFormat.scale = scale
+        UIGraphicsImageRenderer(size: rect.size, format: rendererFormat)
         if let c = UIGraphicsGetCurrentContext() {
             self.draw(in: rect)
             c.setFillColor(color.cgColor)
