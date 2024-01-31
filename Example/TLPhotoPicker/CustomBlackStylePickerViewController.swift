@@ -11,21 +11,18 @@ import TLPhotoPicker
 
 extension UIImage {
     public func colorMask(color:UIColor) -> UIImage {
-        var result: UIImage?
         let rect = CGRect(x:0, y:0, width:size.width, height:size.height)
         let rendererFormat = UIGraphicsImageRendererFormat()
         rendererFormat.opaque = false
         rendererFormat.scale = scale
-        UIGraphicsImageRenderer(size: rect.size, format: rendererFormat)
-        if let c = UIGraphicsGetCurrentContext() {
-            self.draw(in: rect)
-            c.setFillColor(color.cgColor)
-            c.setBlendMode(.sourceAtop)
-            c.fill(rect)
-            result = UIGraphicsGetImageFromCurrentImageContext()
+        let renderer = UIGraphicsImageRenderer(size: rect.size, format: rendererFormat)
+        let newImage = renderer.image { imageRendererContext in
+            imageRendererContext.cgContext.setFillColor(color.cgColor)
+            imageRendererContext.cgContext.setBlendMode(.sourceAtop)
+            imageRendererContext.cgContext.fill(rect)
+            draw(in: rect)
         }
-        UIGraphicsEndImageContext()
-        return result ?? self
+        return newImage
     }
 }
 

@@ -423,11 +423,11 @@ extension UIImage {
             let rendererFormat = UIGraphicsImageRendererFormat()
             rendererFormat.opaque = false
             rendererFormat.scale = scale
-            UIGraphicsImageRenderer(size: size, format: rendererFormat)
-            draw(in: CGRect(origin: .zero, size: size))
-            let result = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return result
+            let renderer = UIGraphicsImageRenderer(size: size, format: rendererFormat)
+            let newImage = renderer.image { imageRendererContext in
+                draw(in: CGRect(origin: .zero, size: size))
+            }
+            return newImage
         }
     }
 }
